@@ -5,6 +5,16 @@ Rectangle {
     height: 600
     color: "white"
     
+    Text {
+	text: "Namensschild drucken:"
+	font.family: "Lato"
+	font.pixelSize: 60
+	font.weight: Font.Normal
+	anchors.horizontalCenter: parent.horizontalCenter
+	anchors.bottom: badge.top
+	anchors.bottomMargin: 60
+    }
+
     Rectangle {
 	anchors.centerIn: parent
 	objectName: "badge"
@@ -12,14 +22,25 @@ Rectangle {
 	width: 720
 	height: 420
 
+	Text {
+	    text: "Bitte warten..."
+	    font.family: "Lato"
+	    font.pixelSize: 50
+	    anchors.centerIn: parent
+	    visible: true
+	    objectName: "waitText"
+	}
+
 	Rectangle {
 	    anchors.centerIn: parent
 	    border.width: 4
 	    border.color: "black"
+	    color: "white";
 	    radius: 20
 	    width: 700
 	    height: 400
 	    id: nameBadge
+	    objectName: "nameBadge"
 	    
 	    TextInput {
 		text: "Vorname"
@@ -96,27 +117,57 @@ Rectangle {
 	    id: invisibleText
 	    visible: false
 	}
+
+
+
+	
     }
+
 
     
     Rectangle {
 	anchors.right: badge.right
 	anchors.top: badge.bottom
 	anchors.topMargin: 40
-	width: 100
-	height: 30
+	width: 130
+	height: 40
 	Text {
+	    font.family: "Lato"
+	    font.pixelSize: 20
+	    font.weight: Font.Normal
 	    anchors.centerIn: parent
+	    color: (inputName.text == "Vorname" || inputName.text.length < 2) ? "#999" : "#000"
 	    text: "Weiter >>"
 	}
-	border.width: 1
-	border.color: "#999"
+	color: "#e9e9e9"
+
 	MouseArea {
 	    anchors.fill: parent
 	    onClicked: {
-		handler.run()
+		if (inputName == "Vorname" || inputName.length < 2) {
+		} else {
+		    handler.run()
+		}
 	    }
 	}
     }
     
+
+	PropertyAnimation {
+	    id: animateNameBadgeOff
+	    objectName: "animateNameBadgeOff"
+	    target: nameBadge
+	    properties: "opacity"
+	    to: 0
+	    duration: 200
+	}
+
+	PropertyAnimation {
+	    id: animateNameBadgeOn
+	    objectName: "animateNameBadgeOn"
+	    target: nameBadge
+	    properties: "opacity"
+	    to: 1
+	    duration: 200
+	}
 }

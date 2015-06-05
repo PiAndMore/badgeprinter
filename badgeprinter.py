@@ -8,6 +8,9 @@ from PySide.QtGui import *
 from PySide.QtDeclarative import *
 import PIL
 import PIL.Image
+import sqlite3
+import random 
+from time import sleep
 
 class MyHandler(QObject):
     
@@ -15,6 +18,19 @@ class MyHandler(QObject):
     def __init__(self, window, *args, **kwargs):
         QObject.__init__(self, *args, **kwargs)
         self.window = window
+        self.conn = sqlite3.connect('badges.db')
+        c = self.conn.cursor()
+        c.execute(""" CREATE TABLE IF NOT EXISTS badges (created datetime, name text, twitter text, ticket text) """)
+        self.conn.commit()
+
+    def get_ticket_number(self):
+        c = self.conn.cursor()
+        while True:
+            ticket = "%04d" % random.randint(1,9999)
+            c.execute(""" SELECT count(*) FROM badges WHERE ticket=? """, (ticket,))
+            if c.fetchone()[0] == 0:
+                c.close()
+                return ticket
 
     @Slot()
     def run(self):
@@ -24,7 +40,8 @@ class MyHandler(QObject):
         if inputTwitter.property('text') == "@twitter" or len(inputTwitter.property("text")) < 1:
             inputTwitter.setProperty("visible", False)
             
-        window.rootObject().findChild(QObject, 'inputName').select(0,0)
+        inputName = window.rootObject().findChild(QObject, 'inputName')
+        inputName.select(0,0)
 
         msgBox = QMessageBox()
         msgBox.setWindowTitle(u"Teilnahme an der Verlosung?")
@@ -37,18 +54,21 @@ class MyHandler(QObject):
 
         mboxres = msgBox.exec_()
         
+        label = window.rootObject().findChild(QObject, 'textLos')
+
+        ticket = ''
         if mboxres == QMessageBox.Yes:
-            label = window.rootObject().findChild(QObject, 'textLos')
-            label.setProperty("text", "Los #1234")
+            ticket = self.get_ticket_number()
+            label.setProperty("text", "Los #%s" % ticket)
             label.setProperty("visible", True)
         elif mboxres != QMessageBox.No:
             return
 
-
         badge = window.rootObject().findChild(QObject, 'badge')
         image = QPixmap.grabWidget(window, badge.x(), badge.y(), badge.width(), badge.height())
-        print repr(badge)
-        #image.save("/tmp/test.png", "PNG")
+
+        window.rootObject().findChild(QObject, "animateNameBadgeOff").start()
+
         bytes = QByteArray()
         buffer = QBuffer(bytes)
         buffer.open(QIODevice.WriteOnly)
@@ -56,7 +76,27 @@ class MyHandler(QObject):
         
         p = subprocess.Popen(['convert', '-density', '284',  '-quality', '100', 'png:-', '-gravity', 'center',  '-resize', '2430x1420!', '/tmp/test.pdf'], stdin=subprocess.PIPE)
         p.communicate(bytes.data())
+        
+        c = self.conn.cursor()
+        c.execute(""" INSERT INTO badges (created, name, twitter,
+        ticket) VALUES (datetime('now'),?,?,?) """,
+                  (inputName.property('text'), inputTwitter.property('text'),
+                   ticket))
+        self.conn.commit()
+        c.close()
+        QTimer.singleShot(2000, lambda: self.reset_ui())
 
+    def reset_ui(self):
+        label = window.rootObject().findChild(QObject, 'textLos')
+        inputName = window.rootObject().findChild(QObject, 'inputName')
+        inputTwitter = window.rootObject().findChild(QObject, 'inputTwitter')
+        
+        inputTwitter.setProperty("visible", True)
+        inputTwitter.setProperty('text', "@twitter")
+        inputName.setProperty('text', "Vorname")
+        inputName.selectAll()
+        label.setProperty("visible", False)
+        window.rootObject().findChild(QObject, "animateNameBadgeOn").start()
 
 # Our main window
 class MainWindow(QDeclarativeView):
