@@ -70,6 +70,14 @@ Rectangle {
 		id: inputTwitter
 		objectName: "inputTwitter"
 		color: (text == "@twitter") ? "#999" : "#000"
+		MouseArea {
+		    anchors.fill: parent
+		    enabled: inputTwitter.focus == false && inputTwitter.text == "@twitter" 
+		    onClicked: {
+			inputTwitter.select(1,8);
+			inputTwitter.focus = true;
+		    }
+		}
 	    }
 
 	    Image {
@@ -96,7 +104,7 @@ Rectangle {
 	    }
 
 	    Text {
-		text: "Los #2783"
+		text: "Los #XXXX"
 		anchors.right: parent.right
 		anchors.rightMargin: -40
 		anchors.verticalCenter: parent.verticalCenter
@@ -105,7 +113,8 @@ Rectangle {
 		font.weight: Font.Normal
 		font.pixelSize: 20
 		objectName: "textLos"
-		visible: false
+		visible: x1.visible
+		id: textLos
 	    }
 
 	}
@@ -123,6 +132,64 @@ Rectangle {
 	
     }
 
+    Rectangle {
+	anchors.left: badge.left
+	anchors.leftMargin: 10
+	anchors.top: badge.bottom
+	anchors.topMargin: 40
+	width: 30
+	height: 30
+	border.width: 4
+	border.color: "#000"
+	id: checkbox
+	opacity: nameBadge.opacity
+
+	Text {
+	    text: "X"
+	    font.family: "Courier"
+	    font.pixelSize: 25
+	    font.bold: true
+	    anchors.centerIn: parent
+	    id: x1
+	    objectName: "checkboxSelected"
+	}
+
+	MouseArea {
+	    anchors.fill: parent
+	    onClicked: {
+		x1.visible = !x1.visible;
+	    }
+	}
+
+
+
+	Text {
+	    anchors.left: checkbox.right
+	    anchors.leftMargin: 15
+	    anchors.baseline: checkbox.bottom
+	    anchors.baselineOffset: -7
+	    font.family: "Lato"
+	    font.pixelSize: 25
+	    font.weight: Font.Normal
+	    text: "An der Verlosung teilnehmen"
+	    id: checkboxText1
+	}
+
+	Text {
+	    anchors.left: checkboxText1.left
+	    anchors.top: checkboxText1.bottom
+	    anchors.topMargin: 5
+	    font.family: "Lato"
+	    font.pixelSize: 20
+	    font.weight: Font.Normal
+	    text: "Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Dein Namensschild ist das Los."
+	    wrapMode: Text.WordWrap
+	    width: 450
+	}
+
+    }
+    
+    
 
     
     Rectangle {
@@ -131,43 +198,46 @@ Rectangle {
 	anchors.topMargin: 40
 	width: 130
 	height: 40
+	color: "#e9e9e9"
+	opacity: nameBadge.opacity
 	Text {
 	    font.family: "Lato"
 	    font.pixelSize: 20
 	    font.weight: Font.Normal
 	    anchors.centerIn: parent
 	    color: (inputName.text == "Vorname" || inputName.text.length < 2) ? "#999" : "#000"
-	    text: "Weiter >>"
+	    text: "Drucken >>"
 	}
-	color: "#e9e9e9"
 
 	MouseArea {
 	    anchors.fill: parent
 	    onClicked: {
-		if (inputName == "Vorname" || inputName.length < 2) {
+		if (inputName.text == "Vorname" || inputName.text.length < 2) {
 		} else {
-		    handler.run()
+		    enabled = false;
+		    handler.run();
 		}
 	    }
+	    objectName: "printButtonArea"
 	}
     }
     
 
-	PropertyAnimation {
-	    id: animateNameBadgeOff
-	    objectName: "animateNameBadgeOff"
-	    target: nameBadge
-	    properties: "opacity"
-	    to: 0
-	    duration: 200
-	}
+    PropertyAnimation {
+	id: animateNameBadgeOff
+	objectName: "animateNameBadgeOff"
+	target: nameBadge
+	properties: "opacity"
+	to: 0
+	duration: 200
+    }
 
-	PropertyAnimation {
-	    id: animateNameBadgeOn
-	    objectName: "animateNameBadgeOn"
-	    target: nameBadge
-	    properties: "opacity"
-	    to: 1
-	    duration: 200
-	}
+    PropertyAnimation {
+	id: animateNameBadgeOn
+	objectName: "animateNameBadgeOn"
+	target: nameBadge
+	properties: "opacity"
+	to: 1
+	duration: 200
+    }
 }

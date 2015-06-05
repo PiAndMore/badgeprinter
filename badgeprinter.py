@@ -34,7 +34,7 @@ class MyHandler(QObject):
 
     @Slot()
     def run(self):
-        
+
         inputTwitter = window.rootObject().findChild(QObject, 'inputTwitter')
         inputTwitter.select(0,0)
         if inputTwitter.property('text') == "@twitter" or len(inputTwitter.property("text")) < 1:
@@ -43,26 +43,18 @@ class MyHandler(QObject):
         inputName = window.rootObject().findChild(QObject, 'inputName')
         inputName.select(0,0)
 
-        msgBox = QMessageBox()
-        msgBox.setWindowTitle(u"Teilnahme an der Verlosung?")
-        msgBox.setText(u"Möchten Sie an der Verlosung teilnehmen?")
-        msgBox.setIcon(QMessageBox.Question)
-        msgBox.setInformativeText(u"Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Ihr Namensschild ist das Los.")
-        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Abort)
-        msgBox.setDefaultButton(QMessageBox.Yes)
-        msgBox.setEscapeButton(QMessageBox.Abort)
-
-        mboxres = msgBox.exec_()
+        checkboxSelected = window.rootObject().findChild(QObject, 'checkboxSelected').property('visible')
         
         label = window.rootObject().findChild(QObject, 'textLos')
 
         ticket = ''
-        if mboxres == QMessageBox.Yes:
+        if checkboxSelected:
             ticket = self.get_ticket_number()
             label.setProperty("text", "Los #%s" % ticket)
-            label.setProperty("visible", True)
-        elif mboxres != QMessageBox.No:
-            return
+            #label.setProperty("visible", True)
+
+        inputName.setProperty('focus', False)
+        inputTwitter.setProperty('focus', False)
 
         badge = window.rootObject().findChild(QObject, 'badge')
         image = QPixmap.grabWidget(window, badge.x(), badge.y(), badge.width(), badge.height())
@@ -95,7 +87,9 @@ class MyHandler(QObject):
         inputTwitter.setProperty('text', "@twitter")
         inputName.setProperty('text', "Vorname")
         inputName.selectAll()
-        label.setProperty("visible", False)
+        label.setProperty("text", "Los #XXXX")
+        window.rootObject().findChild(QObject, 'checkboxSelected').setProperty("visible", True)
+        window.rootObject().findChild(QObject, 'printButtonArea').setProperty('enabled', True)
         window.rootObject().findChild(QObject, "animateNameBadgeOn").start()
 
 # Our main window
@@ -114,9 +108,10 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     # Create and show the main window
     window = MainWindow()
+    window.setWindowFlags(Qt.FramelessWindowHint)
     handler = MyHandler(window)
     window.rootContext().setContextProperty("handler", handler)
     window.rootObject().findChild(QObject, 'inputName').selectAll()
-    window.show()
+    window.showFullScreen()
     # Run the main Qt loop
     sys.exit(app.exec_())
