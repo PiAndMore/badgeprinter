@@ -55,6 +55,13 @@ Rectangle {
 		selectByMouse: true
 		objectName: "inputName"
 		focus: true
+		Keys.onPressed: {
+       				if (event.key == Qt.Key_Return || event.key == Qt.Key_Tab) {
+				   inputTwitter.focus = true;
+				   inputTwitter.select(1,8);
+            			   event.accepted = true;
+        			}
+    		}
 	    }		   	   
 	    
 	    TextInput {
@@ -78,6 +85,11 @@ Rectangle {
 			inputTwitter.focus = true;
 		    }
 		}
+		Keys.onPressed: {
+       				if (event.key == Qt.Key_Return) {
+						    handler.run();
+				}
+		}
 	    }
 
 	    Image {
@@ -93,7 +105,7 @@ Rectangle {
 	    
 	    
 	    Text {
-		text: "#pam7"
+		text: "#pam9"
 		anchors.baseline: parent.bottom
 		anchors.baselineOffset: -30
 		anchors.right: parent.right
