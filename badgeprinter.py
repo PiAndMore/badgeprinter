@@ -11,6 +11,9 @@ import PIL.Image
 import sqlite3
 import random 
 from time import sleep
+import os
+
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 class MyHandler(QObject):
     
@@ -65,9 +68,14 @@ class MyHandler(QObject):
         buffer = QBuffer(bytes)
         buffer.open(QIODevice.WriteOnly)
         image.save(buffer, "PNG")
-        
-        p = subprocess.Popen(['convert', '-density', '284',  '-quality', '100', 'png:-', '-gravity', 'center',  '-resize', '2430x1420!', '/tmp/test.pdf'], stdin=subprocess.PIPE)
-        p.communicate(bytes.data())
+
+        density = 284  / (38.0/50.0)
+        convert = subprocess.Popen(['convert', '-density', '%d' % density,  '-quality', '100', 'png:-', '-gravity', 'center',  '-resize', '2430x1420!', '/tmp/badge.pdf'], stdin=subprocess.PIPE)
+        convert.communicate(bytes.data())
+        lpr = subprocess.Popen(['lpr', '-PQL-710W', '-o', 'fit-to-page', '/tmp/badge.pdf'])
+        lpr.communicate()
+        #convert.stdout.close()
+        #convert.wait()#
         
         c = self.conn.cursor()
         c.execute(""" INSERT INTO badges (created, name, twitter,

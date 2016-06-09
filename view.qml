@@ -55,6 +55,19 @@ Rectangle {
 		selectByMouse: true
 		objectName: "inputName"
 		focus: true
+		Keys.onPressed: {
+			if (event.key == Qt.Key_Tab || event.key == Qt.Key_Return) {
+			    inputTwitter.select(1,8);
+			    inputTwitter.focus = true;
+			}
+			if (event.key == Qt.Key_Escape) {
+			   inputName.text = "Vorname";
+			   inputTwitter.text = "@twitter";
+			   inputName.focus = true;
+			   inputName.selectAll();
+			   // x1.visible = true; remove for pam 8
+			}			   
+		}
 	    }		   	   
 	    
 	    TextInput {
@@ -78,6 +91,15 @@ Rectangle {
 			inputTwitter.focus = true;
 		    }
 		}
+		Keys.onPressed: {
+			if (event.key == Qt.Key_Escape) {
+			   inputName.text = "Vorname";
+			   inputTwitter.text = "@twitter";
+			   inputName.focus = true;
+			   inputName.selectAll();
+			   // x1.visible = true; removed for pam8
+			}			   
+		}
 	    }
 
 	    Image {
@@ -93,9 +115,9 @@ Rectangle {
 	    
 	    
 	    Text {
-		text: "#pam7"
+		text: "#pam8"
 		anchors.baseline: parent.bottom
-		anchors.baselineOffset: -30
+		anchors.baselineOffset: -34
 		anchors.right: parent.right
 		anchors.rightMargin: 30
 		font.family: "Lato"
@@ -144,6 +166,8 @@ Rectangle {
 	id: checkbox
 	opacity: nameBadge.opacity
 
+	visible: false //pam 8
+
 	Text {
 	    text: "X"
 	    font.family: "Courier"
@@ -152,6 +176,7 @@ Rectangle {
 	    anchors.centerIn: parent
 	    id: x1
 	    objectName: "checkboxSelected"
+	    visible: false // added for pam8
 	}
 
 	MouseArea {
@@ -173,6 +198,7 @@ Rectangle {
 	    font.weight: Font.Normal
 	    text: "An der Verlosung teilnehmen"
 	    id: checkboxText1
+	    visible: false //pam 8
 	}
 
 	Text {
@@ -182,9 +208,10 @@ Rectangle {
 	    font.family: "Lato"
 	    font.pixelSize: 20
 	    font.weight: Font.Normal
-	    text: "Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Dein Namensschild ist das Los."
+	    text: "Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Dein Namensschild ist das Los. Der Rechtsweg ist ausgeschlossen."
 	    wrapMode: Text.WordWrap
 	    width: 450
+	    visible: false //pam 8
 	}
 
     }
@@ -208,6 +235,18 @@ Rectangle {
 	    color: (inputName.text == "Vorname" || inputName.text.length < 2) ? "#999" : "#000"
 	    text: "Drucken >>"
 	}
+
+	Text {
+	    font.family: "Lato"
+	    font.pixelSize: 16
+	    font.weight: Font.Normal
+	    anchors.top: parent.bottom
+	    anchors.topMargin: 10
+	    anchors.left: parent.left
+	    color:  "#000"
+	    text: "Namensschild bitte nicht auf empfindliche Stoffe kleben."
+	}
+
 
 	MouseArea {
 	    anchors.fill: parent
