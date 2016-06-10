@@ -56,16 +56,12 @@ Rectangle {
 		objectName: "inputName"
 		focus: true
 		Keys.onPressed: {
-			if (event.key == Qt.Key_Tab || event.key == Qt.Key_Return) {
-			    inputTwitter.select(1,8);
-			    inputTwitter.focus = true;
-			}
 			if (event.key == Qt.Key_Escape) {
 			   inputName.text = "Vorname";
 			   inputTwitter.text = "@twitter";
 			   inputName.focus = true;
 			   inputName.selectAll();
-			   // x1.visible = true; remove for pam 8
+			   x1.visible = true; //remove for pam 8
 			}			   
 		}
 	    }		   	   
@@ -97,8 +93,11 @@ Rectangle {
 			   inputTwitter.text = "@twitter";
 			   inputName.focus = true;
 			   inputName.selectAll();
-			   // x1.visible = true; removed for pam8
+			   x1.visible = true; //removed for pam8
 			}			   
+       				if (event.key == Qt.Key_Return) {
+						    handler.run();
+				}
 		}
 	    }
 
@@ -115,7 +114,7 @@ Rectangle {
 	    
 	    
 	    Text {
-		text: "#pam8"
+		text: "#pam9"
 		anchors.baseline: parent.bottom
 		anchors.baselineOffset: -34
 		anchors.right: parent.right
@@ -176,7 +175,7 @@ Rectangle {
 	    anchors.centerIn: parent
 	    id: x1
 	    objectName: "checkboxSelected"
-	    visible: false // added for pam8
+	    //visible: false // added for pam8
 	}
 
 	MouseArea {
