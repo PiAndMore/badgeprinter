@@ -20,7 +20,7 @@ class MyHandler(QObject):
         self.window = window
         self.conn = sqlite3.connect('badges.db')
         c = self.conn.cursor()
-        c.execute(""" SELECT ticket FROM badges""")
+        c.execute(""" SELECT ticket FROM badges WHERE ticket != ''""")
         tickets = []
         for t in c.fetchall():
             tickets.append(t[0])
@@ -30,7 +30,7 @@ class MyHandler(QObject):
 
     @Slot(QObject)
     def run(self, target):
-        target.setProperty('text', target.property('text') + "\n#" + self.tickets.pop())
+        target.setProperty('text', self.tickets.pop())
         
             
 

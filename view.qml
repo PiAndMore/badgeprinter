@@ -63,6 +63,11 @@ Rectangle {
 			   inputName.selectAll();
 			   x1.visible = true; //remove for pam 8
 			}			   
+			if (event.key == Qt.Key_Tab || event.key == Qt.Key_Return) {
+			inputTwitter.select(1,8);
+			inputTwitter.focus = true;
+			}
+
 		}
 	    }		   	   
 	    
@@ -122,17 +127,18 @@ Rectangle {
 		font.family: "Lato"
 		font.weight: Font.Normal
 		font.pixelSize: 60
+		visible: (inputTwitter.text.length < 11) 
 	    }
 
 	    Text {
 		text: "Los #XXXX"
 		anchors.right: parent.right
-		anchors.rightMargin: -40
+		anchors.rightMargin: -70
 		anchors.verticalCenter: parent.verticalCenter
 		rotation: -90
 		font.family: "monospace"
 		font.weight: Font.Normal
-		font.pixelSize: 20
+		font.pixelSize: 40
 		objectName: "textLos"
 		visible: x1.visible
 		id: textLos
@@ -165,7 +171,7 @@ Rectangle {
 	id: checkbox
 	opacity: nameBadge.opacity
 
-	visible: false //pam 8
+	//visible: false //pam 8
 
 	Text {
 	    text: "X"
@@ -197,7 +203,7 @@ Rectangle {
 	    font.weight: Font.Normal
 	    text: "An der Verlosung teilnehmen"
 	    id: checkboxText1
-	    visible: false //pam 8
+	    //visible: false //pam 8
 	}
 
 	Text {
@@ -210,7 +216,7 @@ Rectangle {
 	    text: "Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Dein Namensschild ist das Los. Der Rechtsweg ist ausgeschlossen."
 	    wrapMode: Text.WordWrap
 	    width: 450
-	    visible: false //pam 8
+	    //visible: false //pam 8
 	}
 
     }

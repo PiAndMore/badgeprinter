@@ -18,9 +18,10 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 class MyHandler(QObject):
     
 
-    def __init__(self, window, *args, **kwargs):
+    def __init__(self, window, app, *args, **kwargs):
         QObject.__init__(self, *args, **kwargs)
         self.window = window
+        self.app = app
         self.conn = sqlite3.connect('badges.db')
         c = self.conn.cursor()
         c.execute(""" CREATE TABLE IF NOT EXISTS badges (created datetime, name text, twitter text, ticket text) """)
@@ -64,6 +65,8 @@ class MyHandler(QObject):
 
         window.rootObject().findChild(QObject, "animateNameBadgeOff").start()
 
+        self.app.processEvents(QEventLoop.AllEvents, 2000)
+
         bytes = QByteArray()
         buffer = QBuffer(bytes)
         buffer.open(QIODevice.WriteOnly)
@@ -72,7 +75,7 @@ class MyHandler(QObject):
         density = 284  / (38.0/50.0)
         convert = subprocess.Popen(['convert', '-density', '%d' % density,  '-quality', '100', 'png:-', '-gravity', 'center',  '-resize', '2430x1420!', '/tmp/badge.pdf'], stdin=subprocess.PIPE)
         convert.communicate(bytes.data())
-        lpr = subprocess.Popen(['lpr', '-PQL-710W', '-o', 'fit-to-page', '/tmp/badge.pdf'])
+        lpr = subprocess.Popen(['lpr', '-PBrother_QL-710W', '-o', 'fit-to-page', '/tmp/badge.pdf'])
         lpr.communicate()
         #convert.stdout.close()
         #convert.wait()#
@@ -95,6 +98,7 @@ class MyHandler(QObject):
         inputTwitter.setProperty('text', "@twitter")
         inputName.setProperty('text', "Vorname")
         inputName.selectAll()
+        inputName.setProperty('focus', True)
         label.setProperty("text", "Los #XXXX")
         window.rootObject().findChild(QObject, 'checkboxSelected').setProperty("visible", True)
         window.rootObject().findChild(QObject, 'printButtonArea').setProperty('enabled', True)
@@ -117,7 +121,7 @@ if __name__ == '__main__':
     # Create and show the main window
     window = MainWindow()
     window.setWindowFlags(Qt.FramelessWindowHint)
-    handler = MyHandler(window)
+    handler = MyHandler(window, app)
     window.rootContext().setContextProperty("handler", handler)
     window.rootObject().findChild(QObject, 'inputName').selectAll()
     window.showFullScreen()

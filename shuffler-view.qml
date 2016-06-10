@@ -17,10 +17,10 @@ Rectangle {
 		anchors.left: parent.left
 		anchors.leftMargin: 20
 		anchors.top: parent.top
-		anchors.topMargin: -100
+		anchors.topMargin: 10
 		fillMode: Image.PreserveAspectFit
 		smooth: true
-		width: 500
+		width: 300
 	    }
 
 
@@ -31,7 +31,7 @@ Rectangle {
 	font.weight: Font.Normal
 	anchors.horizontalCenter: parent.horizontalCenter
 	anchors.top: parent.top
-	anchors.topMargin: 20
+	anchors.topMargin: 300
 	anchors.bottomMargin: 60
 	visible: true
 	id: gewinner
@@ -40,7 +40,7 @@ Rectangle {
     Text {
 	text: "#pam9"
 	font.family: "Lato"
-	font.pixelSize: 170
+	font.pixelSize: 80
 	font.weight: Font.Normal
 	anchors.right: parent.right
 	anchors.bottom: parent.bottom
@@ -65,7 +65,7 @@ Rectangle {
 	    objectName: "winners"
 	    text: ""
 	    font.family: "Lato"
-	    font.pixelSize: 50
+	    font.pixelSize: 250
 	    anchors.centerIn: parent
 	    visible: true
 	    clip: true
