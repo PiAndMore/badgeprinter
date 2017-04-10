@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -'''- coding: utf-8 -'''-
  
 import sys
@@ -12,6 +12,15 @@ import sqlite3
 import random 
 from time import sleep
 import os
+from brother_ql.raster import BrotherQLRaster
+from brother_ql.backends import backend_factory
+from brother_ql import create_label
+from io import BytesIO
+
+config = {
+    'device': '/dev/usb/lp0',
+    'type': 'QL-720NW',
+    }
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
@@ -71,14 +80,30 @@ class MyHandler(QObject):
         buffer = QBuffer(bytes)
         buffer.open(QIODevice.WriteOnly)
         image.save(buffer, "PNG")
+        buffer.close()
 
-        density = 284  / (38.0/50.0)
-        convert = subprocess.Popen(['convert', '-density', '%d' % density,  '-quality', '100', 'png:-', '-gravity', 'center',  '-resize', '2430x1420!', '/tmp/badge.pdf'], stdin=subprocess.PIPE)
-        convert.communicate(bytes.data())
-        lpr = subprocess.Popen(['lpr', '-PBrother_QL-710W', '-o', 'fit-to-page', '/tmp/badge.pdf'])
-        lpr.communicate()
-        #convert.stdout.close()
-        #convert.wait()#
+        img = PIL.Image.open(BytesIO(bytes.data()))
+        img.thumbnail((2000, 413))
+        img = img.rotate(90)
+        print (img.size)
+        qlr = BrotherQLRaster(config['type'])
+        qlr.exception_on_warning=True
+        
+        create_label(qlr, img, '38')
+        selected_backend = 'linux_kernel'
+        
+        be = backend_factory(selected_backend)
+        list_available_devices = be['list_available_devices']
+        BrotherQLBackend       = be['backend_class']
+        printer = BrotherQLBackend(config['device'])
+        printer.write(qlr.data)
+        r = ">"
+        while r:
+            r = printer.read()
+            print (r)
+        print ("\nDone printing!")
+        
+        
         
         c = self.conn.cursor()
         c.execute(""" INSERT INTO badges (created, name, twitter,
