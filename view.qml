@@ -61,7 +61,6 @@ Rectangle {
 			   inputTwitter.text = "@twitter";
 			   inputName.focus = true;
 			   inputName.selectAll();
-			   x1.visible = true; //remove for pam 8
 			}			   
 			if (event.key == Qt.Key_Tab || event.key == Qt.Key_Return) {
 			inputTwitter.select(1,8);
@@ -98,7 +97,6 @@ Rectangle {
 			   inputTwitter.text = "@twitter";
 			   inputName.focus = true;
 			   inputName.selectAll();
-			   x1.visible = true; //removed for pam8
 			}			   
        				if (event.key == Qt.Key_Return) {
 						    handler.run();
@@ -119,7 +117,7 @@ Rectangle {
 	    
 	    
 	    Text {
-		text: "#pam9"
+		text: "#pam10"
 		anchors.baseline: parent.bottom
 		anchors.baselineOffset: -34
 		anchors.right: parent.right
@@ -140,7 +138,7 @@ Rectangle {
 		font.weight: Font.Normal
 		font.pixelSize: 40
 		objectName: "textLos"
-		visible: x1.visible
+		//visible: x1.visible
 		id: textLos
 	    }
 
@@ -159,67 +157,22 @@ Rectangle {
 	
     }
 
-    Rectangle {
-	anchors.left: badge.left
-	anchors.leftMargin: 10
-	anchors.top: badge.bottom
-	anchors.topMargin: 40
-	width: 30
-	height: 30
-	border.width: 4
-	border.color: "#000"
-	id: checkbox
-	opacity: nameBadge.opacity
-
-	//visible: false //pam 8
-
-	Text {
-	    text: "X"
-	    font.family: "Courier"
-	    font.pixelSize: 25
-	    font.bold: true
-	    anchors.centerIn: parent
-	    id: x1
-	    objectName: "checkboxSelected"
-	    //visible: false // added for pam8
-	}
-
-	MouseArea {
-	    anchors.fill: parent
-	    onClicked: {
-		x1.visible = !x1.visible;
-	    }
-	}
-
 
 
 	Text {
-	    anchors.left: checkbox.right
-	    anchors.leftMargin: 15
-	    anchors.baseline: checkbox.bottom
-	    anchors.baselineOffset: -7
-	    font.family: "Lato"
-	    font.pixelSize: 25
-	    font.weight: Font.Normal
-	    text: "An der Verlosung teilnehmen"
-	    id: checkboxText1
-	    //visible: false //pam 8
-	}
-
-	Text {
-	    anchors.left: checkboxText1.left
-	    anchors.top: checkboxText1.bottom
-	    anchors.topMargin: 5
+	    anchors.left: badge.left
+	    anchors.leftMargin: 10
+	    anchors.top: badge.bottom
+            anchors.topMargin: 40
+            opacity: nameBadge.opacity
 	    font.family: "Lato"
 	    font.pixelSize: 20
 	    font.weight: Font.Normal
 	    text: "Am Ende der Veranstaltung werden unter allen Anwesenden Sachpreise verlost (Bücher, Gadgets, etc.). Dein Namensschild ist das Los. Der Rechtsweg ist ausgeschlossen."
 	    wrapMode: Text.WordWrap
 	    width: 450
-	    //visible: false //pam 8
 	}
 
-    }
     
     
 

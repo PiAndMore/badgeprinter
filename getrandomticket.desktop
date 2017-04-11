@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Get Random Tickets
+Exec=/home/pi/badgeprinter/getrandomticket.py
+Icon=/home/pi/badgeprinter/avatar.svg
+Encoding=UTF-8
+Terminal=false
+Categories=None;
+Type=Application

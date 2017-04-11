@@ -56,7 +56,7 @@ class MyHandler(QObject):
         inputName = window.rootObject().findChild(QObject, 'inputName')
         inputName.select(0,0)
 
-        checkboxSelected = window.rootObject().findChild(QObject, 'checkboxSelected').property('visible')
+        checkboxSelected = True#window.rootObject().findChild(QObject, 'checkboxSelected').property('visible')
         
         label = window.rootObject().findChild(QObject, 'textLos')
 
@@ -125,7 +125,7 @@ class MyHandler(QObject):
         inputName.selectAll()
         inputName.setProperty('focus', True)
         label.setProperty("text", "Los #XXXX")
-        window.rootObject().findChild(QObject, 'checkboxSelected').setProperty("visible", True)
+        #window.rootObject().findChild(QObject, 'checkboxSelected').setProperty("visible", True)
         window.rootObject().findChild(QObject, 'printButtonArea').setProperty('enabled', True)
         window.rootObject().findChild(QObject, "animateNameBadgeOn").start()
 
