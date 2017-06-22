@@ -49,7 +49,7 @@ Rectangle {
 	anchors.left: parent.left
 	anchors.leftMargin: 20
 	anchors.bottom: parent.bottom
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 230
 	
 	width: 150
 	fillMode: Image.PreserveAspectFit
@@ -60,7 +60,7 @@ Rectangle {
     Text {
 	text: "#pam10"
 	anchors.baseline: parent.bottom
-	anchors.baselineOffset: -34
+	anchors.baselineOffset: -234
 	anchors.right: parent.right
 	anchors.rightMargin: 30
 	font.family: "Lato"
@@ -76,12 +76,13 @@ Rectangle {
 	//objectName: "animateWinnerOn"
 	target: currentWinner
 	properties: "anchors.bottomMargin"
-	from: -200
+	from: -220
 	to: -15
-	duration: 200
+	duration: 300
+	easing.type: Easing.InCubic
 	onRunningChanged: {
 	    if (! running) {
-		winner.createObject(winners, {text: currentWinner.text});
+		winner.createObject(winners, {text: currentWinner.number});
 	    }
 
 	}
@@ -91,15 +92,30 @@ Rectangle {
 	id: animateWinnerOff
 	//objectName: "animateWinnerOff"
 	target: currentWinner
-	properties: "opacity"
-	from: 1
-	to: 0
-	duration: 200
+	properties: "anchors.bottomMargin"
+	to: -220
+	from: -15
+	duration: 300
+	easing.type: Easing.OutCubic
+	onRunningChanged: {
+	    if (! running) {
+		showNextWinner();
+	    }
+	}
+    }
+
+    
+    function showNextWinner() {
+	handler.shuffle();
+	var w = "" + latestWinnerName;
+	currentWinner.text = w;
+	currentWinner.number = latestWinnerTicket
+	animateWinnerOn.start();
     }
 
     Rectangle {
 	id: currentWinner
-	width: parent.width
+	width: parent.width-20
 	height: 210
 	anchors.horizontalCenter: parent.horizontalCenter
 	anchors.bottom: parent.bottom
@@ -121,15 +137,18 @@ Rectangle {
     }
 
     MouseArea {
+	property variant firstStart: true
 	anchors.fill: parent
 	onClicked: {
 	    //handler.test();
 	    //winners.children[0].children[0].text = test;
-	    handler.shuffle();
-	    var w = "" + latestWinnerName;
-	    currentWinner.text = w;
-	    currentWinner.number = latestWinnerTicket
-	    animateWinnerOn.start();
+	    if (firstStart) {
+		firstStart = false;
+		showNextWinner();
+	    } else {
+		animateWinnerOff.start()
+	    }
+	    
 	}
     }
     
@@ -139,7 +158,7 @@ Rectangle {
 	anchors.topMargin: 120
 	id: winners
 	spacing: 10
-	columns: 2
+	columns: 3
     }
 
     
