@@ -7,11 +7,11 @@ Rectangle {
 	id: winner
 	Item {
 	    property variant text: "";
-	    height: 40
+	    height: 20
 	    width: main.width/3
 	    Text {
 		text: parent.text;
-		font.pixelSize: 40
+		font.pixelSize: 20
 		id: txt
 		horizontalAlignment: Text.AlignHCenter
 		width: parent.width
@@ -82,7 +82,7 @@ Rectangle {
 	easing.type: Easing.InCubic
 	onRunningChanged: {
 	    if (! running) {
-		winner.createObject(winners, {text: currentWinner.number});
+		winner.createObject(winners, {text: currentWinner.text});
 	    }
 
 	}
@@ -109,7 +109,7 @@ Rectangle {
 	handler.shuffle();
 	var w = "" + latestWinnerName;
 	currentWinner.text = w;
-	currentWinner.number = latestWinnerTicket
+	
 	animateWinnerOn.start();
     }
 
@@ -129,7 +129,7 @@ Rectangle {
 	Text {
 	    anchors.horizontalCenter: parent.horizontalCenter
 	    anchors.bottom: parent.parent.bottom
-	    text: "#" + parent.number + ": " + parent.text
+	    text: "" + parent.text
 	    font.pixelSize: 150
 	    width: parent.width
 	    horizontalAlignment: Text.AlignHCenter

@@ -8,12 +8,16 @@ from PySide.QtGui import *
 from PySide.QtDeclarative import *
 import PIL
 import PIL.Image
-import sqlite3
 import random 
 from time import sleep
 import os
 
+
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
+
+names = ["Alain Mauer", "alp", "Andre Simon", "AndreasZ", "Boris Ruth", "Christian Immler", "Claus Brell", "dewomser", "Florian Wesch", "Friedemann Metzger", "Gerhard Hepp", "Gunter Pietzsch", "Hans de Jong", "Horatius Stream", "Malte Schilling", "Marco Mueller", "Martina Gnaegy", "Michael Stapelberg", "Nico Maas", "Reiner Haffner", "Rainer Wieland", "Tobias Blum", "Tobias Wagner"]
+random.shuffle(names)
 
 class MyHandler(QObject):
     
@@ -22,25 +26,15 @@ class MyHandler(QObject):
         QObject.__init__(self, *args, **kwargs)
         self.window = window
         self.app = app
-        self.conn = sqlite3.connect('badges.db')
-        c = self.conn.cursor()
-        c.execute(""" CREATE TABLE IF NOT EXISTS badges (created datetime, name text, twitter text, ticket text) """)
-        self.conn.commit()
-
-        c = self.conn.cursor()
-        c.execute(""" SELECT name, ticket FROM badges ORDER BY random()""")
-        self.winners = c.fetchall()
 
     @Slot()
     def shuffle(self):
-        if len(self.winners) == 0:
+        if len(names) == 0:
             name = "(Ende!)"
-            ticket = ""
         else:
-            name, ticket = self.winners.pop()
+            name = names.pop()
         
         window.rootContext().setContextProperty("latestWinnerName", name);
-        window.rootContext().setContextProperty("latestWinnerTicket", ticket);
 
     
 
@@ -52,7 +46,7 @@ class MainWindow(QDeclarativeView):
         super(MainWindow, self).__init__(parent)
         self.setWindowTitle("Main Window")
         # Renders 'view.qml'
-        self.setSource(QUrl.fromLocalFile('getrandomticket.qml'))
+        self.setSource(QUrl.fromLocalFile('getspeaker.qml'))
         # QML resizes to main window
         self.setResizeMode(QDeclarativeView.SizeRootObjectToView)
  

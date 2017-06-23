@@ -12,7 +12,7 @@ Rectangle {
 	font.weight: Font.Normal
 	anchors.horizontalCenter: parent.horizontalCenter
 	anchors.bottom: badge.top
-	anchors.bottomMargin: 60
+	anchors.bottomMargin: 20
     }
 
     Rectangle {
