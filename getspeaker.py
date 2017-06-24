@@ -16,7 +16,38 @@ import os
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 
-names = ["Alain Mauer", "alp", "Andre Simon", "AndreasZ", "Boris Ruth", "Christian Immler", "Claus Brell", "dewomser", "Florian Wesch", "Friedemann Metzger", "Gerhard Hepp", "Gunter Pietzsch", "Hans de Jong", "Horatius Stream", "Malte Schilling", "Marco Mueller", "Martina Gnaegy", "Michael Stapelberg", "Nico Maas", "Reiner Haffner", "Rainer Wieland", "Tobias Blum", "Tobias Wagner"]
+names = [
+    "Alain Mauer",
+    "alp",
+    "Andre Simon",
+    "AndreasZ",
+    "Lucco Giusti",
+    "Lukas Ruth",
+    "Christian Immler",
+    "Claus Brell",
+    "Claus Brell",
+    "Daniel Fett",
+    "dewomser",
+    "Florian Wesch",
+    "Florian Wesch",
+    "Friedemann Metzger",
+    "Gerhard Hepp",
+    "Gunter Pietzsch",
+    "Hans de Jong",
+    "Hans de Jong",
+    "Horatius Stream",
+    "Marco Mueller",
+    "Marco Mueller",
+    "Malte Schilling",
+    "Martina Gnaegy",
+    "Michael Stapelberg",
+    "Nico Maas",
+    "Nico Maas",
+    "Rainer Haffner und Tobias Wagner",
+    "Rainer Wieland",
+    "Tobias Blum",
+    "Till Maas"
+]
 random.shuffle(names)
 
 class MyHandler(QObject):
